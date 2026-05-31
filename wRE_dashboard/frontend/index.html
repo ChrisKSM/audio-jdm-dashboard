@@ -1,88 +1,24 @@
-<!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-      (function () {
-        var path = window.location.pathname;
-        if (!path.endsWith('/')) {
-          path = path.substring(0, path.lastIndexOf('/') + 1);
-        }
-        window.__BASE_PATH__ = path;
-        var base = document.createElement('base');
-        base.href = path || '/';
-        document.head.appendChild(base);
-      })();
-    </script>
-    <title>Audio JDM 모델 현황 대시보드</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'lg-red': '#A50034',
-              'lg-red-light': '#F5E6EA',
-              'surface-page': '#f8f9fa',
-              'surface-border': '#e5e7eb',
-            },
-          },
-        },
-      }
-    </script>
-    <style>
-      html { font-family: 'Inter', system-ui, sans-serif; }
-      body { margin: 0; background: #f8f9fa; color: #111827; }
-    </style>
-    <script src="static/vendor/react.production.min.js"></script>
-    <script src="static/vendor/react-dom.production.min.js"></script>
-    <script src="static/vendor/babel.min.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script>
-      (function () {
-        var appUrl = 'static/app.jsx';
-
-        function showError(message) {
-          var root = document.getElementById('root');
-          if (root) {
-            root.innerHTML =
-              '<div style="padding:24px;color:#b91c1c;font-family:Inter,sans-serif">' +
-              '<strong>app.jsx 로드 실패</strong><br><span style="font-size:14px">' +
-              message +
-              '</span></div>';
-          }
-          console.error(message);
-        }
-
-        fetch(appUrl)
-          .then(function (response) {
-            if (!response.ok) {
-              throw new Error(appUrl + ' HTTP ' + response.status);
-            }
-            return response.text();
-          })
-          .then(function (code) {
-            if (!window.Babel || !window.React || !window.ReactDOM) {
-              throw new Error('React/Babel vendor 스크립트가 로드되지 않았습니다.');
-            }
-            var compiled = Babel.transform(code, {
-              presets: ['react'],
-              filename: 'app.jsx',
-            }).code;
-            var script = document.createElement('script');
-            script.text = compiled;
-            document.body.appendChild(script);
-          })
-          .catch(function (error) {
-            showError(error.message || String(error));
-          });
-      })();
-    </script>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="static/base.js"></script>
+    <title>Audio JDM 모델 현황 대시보드</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html { font-family: 'Inter', system-ui, sans-serif; }
+      body { margin: 0; background: #f8f9fa; color: #111827; }
+    </style>
+    <script src="static/vendor/react.production.min.js"></script>
+    <script src="static/vendor/react-dom.production.min.js"></script>
+    <script src="static/vendor/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="static/bootstrap.js"></script>
+  </body>
+</html>
