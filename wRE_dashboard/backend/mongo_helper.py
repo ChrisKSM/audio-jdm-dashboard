@@ -22,6 +22,11 @@ MONGO_API_TOKEN = os.getenv("MONGO_API_TOKEN", "")
 
 MAX_RETRIES = 3
 RETRY_DELAY = 1
+REQUEST_TIMEOUT = 5
+
+
+def _mongo_enabled() -> bool:
+    return bool(MONGO_API_TOKEN)
 
 
 def _headers() -> dict[str, str]:
@@ -32,10 +37,12 @@ def _headers() -> dict[str, str]:
 
 
 def _request(method: str, url: str, **kwargs) -> requests.Response | None:
+    if not _mongo_enabled():
+        return None
     for attempt in range(MAX_RETRIES):
         try:
             resp = requests.request(
-                method, url, headers=_headers(), timeout=30, **kwargs
+                method, url, headers=_headers(), timeout=REQUEST_TIMEOUT, **kwargs
             )
             if resp.status_code < 500:
                 return resp
@@ -92,6 +99,8 @@ def ensure_collection(name: str) -> bool:
 
 
 def get_all_documents(collection: str, use_cache: bool = False) -> list[dict]:
+    if not _mongo_enabled():
+        return []
     params = {"use_cache": str(use_cache).lower()}
     resp = _request(
         "GET",
@@ -105,6 +114,8 @@ def get_all_documents(collection: str, use_cache: bool = False) -> list[dict]:
 
 
 def query_documents(collection: str, query: dict, direct: bool = True) -> list[dict]:
+    if not _mongo_enabled():
+        return []
     params = {"query": json.dumps(query), "direct": str(direct).lower()}
     resp = _request("GET", f"{MONGO_API_BASE}/api/{collection}", params=params)
     if resp and resp.status_code == 200:

@@ -239,15 +239,26 @@ def incremental_sync_issues(
 
 
 def get_last_sync_info() -> dict:
-    full = get_sync_meta("full_sync")
-    incr = get_sync_meta("incremental_sync")
-    return {
-        "has_cache": full is not None and full.get("last_sync") is not None,
-        "full_sync": full.get("last_sync") if full else None,
-        "full_sync_count": full.get("issue_count", 0) if full else 0,
-        "incremental_sync": incr.get("last_sync") if incr else None,
-        "incremental_count": incr.get("issue_count", 0) if incr else 0,
+    defaults = {
+        "has_cache": False,
+        "full_sync": None,
+        "full_sync_count": 0,
+        "incremental_sync": None,
+        "incremental_count": 0,
     }
+    try:
+        full = get_sync_meta("full_sync")
+        incr = get_sync_meta("incremental_sync")
+        return {
+            "has_cache": full is not None and full.get("last_sync") is not None,
+            "full_sync": full.get("last_sync") if full else None,
+            "full_sync_count": full.get("issue_count", 0) if full else 0,
+            "incremental_sync": incr.get("last_sync") if incr else None,
+            "incremental_count": incr.get("issue_count", 0) if incr else 0,
+        }
+    except Exception as exc:
+        logger.warning("get_last_sync_info fallback: %s", exc)
+        return defaults
 
 
 def save_initiative_cache(report_data: dict) -> None:

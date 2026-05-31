@@ -7,6 +7,7 @@ Audio JDM 모델 현황 대시보드 Backend
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 import sys
@@ -507,7 +508,19 @@ async def get_sync_status():
 
 @app.get("/api/sync-info")
 async def get_sync_info():
-    return jira_sync.get_last_sync_info()
+    """MongoDB 미설정/지연 시에도 UI가 멈추지 않도록 빠르게 fallback."""
+    defaults = {
+        "has_cache": False,
+        "full_sync": None,
+        "full_sync_count": 0,
+        "incremental_sync": None,
+        "incremental_count": 0,
+    }
+    try:
+        return await asyncio.wait_for(asyncio.to_thread(jira_sync.get_last_sync_info), timeout=5.0)
+    except Exception as exc:
+        logger.warning("sync-info timeout/error, using defaults: %s", exc)
+        return defaults
 
 
 frontend_dir = os.path.join(_DASHBOARD_DIR, "frontend")
