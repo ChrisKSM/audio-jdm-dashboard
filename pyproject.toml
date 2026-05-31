@@ -1,0 +1,22 @@
+[project]
+name = "audio-jdm-dashboard"
+version = "0.1.0"
+description = "Audio JDM 모델 현황 대시보드 — 파트원별 Initiative 추적"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "python-jira>=3.8.0",
+    "python-dotenv>=1.0.0",
+    "httpx>=0.27.0",
+    "openai>=1.50.0",
+    "requests>=2.32.0",
+    "pydantic>=2.9.0",
+]
+
+[project.optional-dependencies]
+dev = ["ruff>=0.8.0"]
+
+[tool.uv]
+dev-dependencies = []

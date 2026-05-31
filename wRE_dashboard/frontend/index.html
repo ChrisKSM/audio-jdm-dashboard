@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audio JDM 모델 현황 대시보드</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'lg-red': '#A50034',
+              'lg-red-light': '#F5E6EA',
+              'surface-page': '#f8f9fa',
+              'surface-border': '#e5e7eb',
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      html { font-family: 'Inter', system-ui, sans-serif; }
+      body { margin: 0; background: #f8f9fa; color: #111827; }
+    </style>
+    <script src="/static/vendor/react.production.min.js"></script>
+    <script src="/static/vendor/react-dom.production.min.js"></script>
+    <script src="/static/vendor/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react" src="/static/app.jsx"></script>
+  </body>
+</html>
