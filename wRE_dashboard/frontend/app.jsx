@@ -1,5 +1,15 @@
 const { useState, useEffect, useCallback, useMemo } = React
 
+function apiUrl(path) {
+  const normalized = path.replace(/^\//, '')
+  const base =
+    window.__BASE_PATH__ ||
+    (window.location.pathname.endsWith('/')
+      ? window.location.pathname
+      : window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1))
+  return base + normalized
+}
+
 const LG_RED = '#A50034'
 
 const STATUS_COLORS = {
@@ -269,7 +279,7 @@ function App() {
   const [filterMember, setFilterMember] = useState('all')
 
   useEffect(() => {
-    fetch('/api/team-members')
+    fetch(apiUrl('api/team-members'))
       .then((r) => r.json())
       .then((data) => {
         setParts(data)
@@ -278,7 +288,7 @@ function App() {
       })
       .catch((e) => setError(String(e)))
 
-    fetch('/api/sync-info')
+    fetch(apiUrl('api/sync-info'))
       .then((r) => r.json())
       .then(setSyncInfo)
       .catch(() => {})
@@ -296,7 +306,7 @@ function App() {
   }
 
   const pollStatus = useCallback(async () => {
-    const statusRes = await fetch('/api/fetch-status')
+    const statusRes = await fetch(apiUrl('api/fetch-status'))
     const status = await statusRes.json()
     setProgress(status.progress || 0)
     setTaskLabel(status.current_task || '')
@@ -312,7 +322,7 @@ function App() {
       return
     }
 
-    const dataRes = await fetch('/api/dashboard-data')
+    const dataRes = await fetch(apiUrl('api/dashboard-data'))
     if (!dataRes.ok) {
       setError(await dataRes.text())
       return
@@ -332,7 +342,7 @@ function App() {
     setProgress(0)
     setTaskLabel('시작...')
 
-    const res = await fetch('/api/fetch-data', {
+    const res = await fetch(apiUrl('api/fetch-data'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ members: selectedList, source, quick: quickMode }),
@@ -346,7 +356,7 @@ function App() {
   }
 
   const cancelSearch = async () => {
-    await fetch('/api/cancel-search', { method: 'POST' })
+    await fetch(apiUrl('api/cancel-search'), { method: 'POST' })
   }
 
   const filteredPersons = useMemo(() => {

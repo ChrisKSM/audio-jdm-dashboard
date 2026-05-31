@@ -3,6 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        var path = window.location.pathname;
+        if (!path.endsWith('/')) {
+          path = path.substring(0, path.lastIndexOf('/') + 1);
+        }
+        window.__BASE_PATH__ = path;
+        var base = document.createElement('base');
+        base.href = path || '/';
+        document.head.appendChild(base);
+      })();
+    </script>
     <title>Audio JDM 모델 현황 대시보드</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,12 +38,12 @@
       html { font-family: 'Inter', system-ui, sans-serif; }
       body { margin: 0; background: #f8f9fa; color: #111827; }
     </style>
-    <script src="/static/vendor/react.production.min.js"></script>
-    <script src="/static/vendor/react-dom.production.min.js"></script>
-    <script src="/static/vendor/babel.min.js"></script>
+    <script src="static/vendor/react.production.min.js"></script>
+    <script src="static/vendor/react-dom.production.min.js"></script>
+    <script src="static/vendor/babel.min.js"></script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="text/babel" data-presets="react" src="/static/app.jsx"></script>
+    <script type="text/babel" data-presets="react" src="static/app.jsx"></script>
   </body>
 </html>
